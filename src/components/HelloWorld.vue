@@ -1,8 +1,7 @@
 <template>
   <v-container
-    ><v-row
+    ><v-row v-if="questions"
       ><v-col>
-        <div v-if="!questions && !info" >Thanks</div>
         <v-stepper v-if="info != {}" v-model="e6" vertical>
           <div v-for="(i, index) in questions" :key="i.title">
             <v-stepper-step :complete="e6 > index" :step="index + 1">
@@ -25,15 +24,11 @@
                   ></v-text-field>
                 </v-card-text>
               </v-card>
-              <v-btn color="primary" @click="e6 = index + 2">
-                Continue
-              </v-btn>
+              <v-btn color="primary" @click="e6 = index + 2"> Continue </v-btn>
             </v-stepper-content>
           </div>
 
-          <v-stepper-step step="7">
-            Info
-          </v-stepper-step>
+          <v-stepper-step step="7"> Info </v-stepper-step>
           <v-stepper-content step="7">
             <v-card rounded color="blue lighten-5" class="mb-12">
               <v-container>
@@ -116,13 +111,14 @@
                 </v-form>
               </v-container>
             </v-card>
-            <v-btn color="primary" @click="Submit">
-              Sumit
-            </v-btn>
+            <v-btn color="primary" @click="Submit"> Sumit </v-btn>
           </v-stepper-content>
         </v-stepper>
       </v-col></v-row
-    ></v-container
+    >
+    <v-row v-else>
+      <v-col>Thank You</v-col>
+    </v-row></v-container
   >
 </template>
 
@@ -131,17 +127,20 @@ const axios = require("axios");
 export default {
   methods: {
     Submit() {
-      let reqBody = { ...this.info , ...this.questions}
-      axios.post("/assessment/userCreate", reqBody).then(res => {
-        console.log(res);
-        this.questions = {};
-        this.info = {};
-      }).catch( err => {
-                console.log(err);
-        this.questions = {};
-        this.info = {};
-      });
-    }
+      let reqBody = { ...this.info, ...this.questions };
+      axios
+        .post("/assessment/userCreate", reqBody)
+        .then((res) => {
+          console.log(res);
+          this.questions = false;
+          this.info = {};
+        })
+        .catch((err) => {
+          console.log(err);
+          this.questions = false;
+          this.info = {};
+        });
+    },
   },
   data() {
     return {
@@ -154,45 +153,45 @@ export default {
         Country: "",
         Speciality: "",
         Check1: false,
-        Check2: false
+        Check2: false,
       },
       questions: [
         {
           Title: "Q1",
           questionText:
             "What is your organization’s average reach for one campaign? ",
-          answer: ""
+          answer: "",
         },
         {
           Title: "Q2",
           questionText:
             "How many campaigns does your organization run per year? ",
-          answer: ""
+          answer: "",
         },
         {
           Title: "Q3",
           questionText: "What is your organization's average transaction size?",
-          answer: ""
+          answer: "",
         },
         {
           Title: "Q4",
           questionText: "What is your organization's conversion rate?",
-          answer: ""
+          answer: "",
         },
         {
           Title: "Q5",
           questionText: "What  is your organization's close rate?",
-          answer: ""
+          answer: "",
         },
         {
           Title: "Q6",
           questionText:
             "What is the total estimated advertising and marketing budget?",
-          answer: ""
-        }
+          answer: "",
+        },
       ],
-      e6: 1
+      e6: 1,
     };
-  }
+  },
 };
 </script>

@@ -1,10 +1,9 @@
 /* eslint-disable */
 
 <template>
-  <v-container
-    ><v-row
+  <v-container>
+    <v-row v-if="questions"
       ><v-col>
-        <div v-if="!questions">Thanks</div>
         <v-stepper :key="e6" v-model="e6" vertical>
           <div v-for="(i, index) in selectedQuestions" :key="i.Title">
             <v-stepper-step
@@ -40,19 +39,96 @@
             Done
           </v-stepper-step>
           <v-stepper-content :step="selectedQuestions.length + 1">
-            <!-- <v-card rounded color="blue lighten-5" class="mb-12">
+            <v-card rounded color="blue lighten-5" class="mb-12">
               <v-container>
-                <v-row
-                  ><v-col><v-btn>Submit</v-btn></v-col></v-row
-                >
+                <v-form ref="ownerForm">
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        required
+                        solo
+                        v-model="info.FirstName"
+                        label="First Name"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        required
+                        solo
+                        v-model="info.LastName"
+                        label="Last Name"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        required
+                        solo
+                        type="number"
+                        v-model="info.Phone"
+                        label="Phone"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        required
+                        solo
+                        v-model="info.CompanyName"
+                        label="CompanyName"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        required
+                        solo
+                        type="Email"
+                        v-model="info.Email"
+                        label="Email"
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        required
+                        solo
+                        v-model="info.Speciality"
+                        label="Speciality"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        required
+                        solo
+                        v-model="info.Country"
+                        label="Country"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-switch
+                        v-model="info.Check1"
+                        :label="`Flag 1`"
+                      ></v-switch
+                    ></v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-switch
+                        v-model="info.Check2"
+                        :label="`Flag 2`"
+                      ></v-switch
+                    ></v-col>
+                  </v-row>
+                </v-form>
               </v-container>
-            </v-card> -->
+            </v-card>
             <v-btn color="primary" @click="Submit"> Sumit </v-btn>
           </v-stepper-content>
         </v-stepper>
       </v-col></v-row
-    ></v-container
-  >
+    >
+    <v-row v-else>
+      <v-col>Thank You</v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -77,17 +153,20 @@ export default {
       }
     },
     Submit() {
-        this.selectedQuestions.forEach(val => delete val.answers)
+      this.selectedQuestions.forEach((val) => delete val.answers);
       axios
-        .post("/assessment/userCreate", this.selectedQuestions)
+        .post("/assessment/userCreate", {
+          ...this.selectedQuestions,
+          ...this.info,
+        })
         .then((res) => {
           console.log(res);
-          this.questions = {};
+          this.questions = false;
           this.info = {};
         })
         .catch((err) => {
           console.log(err);
-          this.questions = {};
+          this.questions = false;
           this.info = {};
         });
     },
@@ -97,6 +176,17 @@ export default {
   },
   data() {
     return {
+      info: {
+        FirstName: "",
+        LastName: "",
+        Phone: "",
+        Email: "",
+        CompanyName: "",
+        Country: "",
+        Speciality: "",
+        Check1: false,
+        Check2: false,
+      },
       updateCompoent: "",
       selectedQuestions: [],
       questions: [
