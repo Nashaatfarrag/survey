@@ -5,19 +5,21 @@
     </v-app-bar>
 
     <v-main>
-      <HelloWorld />
+      <DynamicTest />
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+// import HelloWorld from "./components/HelloWorld";
+import DynamicTest from "./components/dynamicTest"
 
 export default {
   name: "App",
 
   components: {
-    HelloWorld
+    // HelloWorld,
+    DynamicTest
   },
 
   data: () => ({
