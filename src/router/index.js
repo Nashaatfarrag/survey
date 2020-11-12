@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import Static from "@/components/HelleWorld.vue";
+import Dynamic from "@/components/dynamicTest.vue";
 
 Vue.use(VueRouter);
 
@@ -9,6 +11,16 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home
+  },
+  {
+    path: "/staticQ",
+    name: "Static",
+    component: Static
+  },
+  {
+    path: "/dynamicQ",
+    name: "Dynamic",
+    component: Dynamic
   },
   {
     path: "/about",

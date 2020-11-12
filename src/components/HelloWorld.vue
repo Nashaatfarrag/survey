@@ -128,8 +128,9 @@ export default {
   methods: {
     Submit() {
       let reqBody = { ...this.info, ...this.questions };
+      //change route after /api/* only 
       axios
-        .post("/assessment/userCreate", reqBody)
+        .post("/api/assessment/userCreate", reqBody)
         .then((res) => {
           console.log(res);
           this.questions = false;

@@ -154,8 +154,9 @@ export default {
     },
     Submit() {
       this.selectedQuestions.forEach((val) => delete val.answers);
+      //change route after /api/* only 
       axios
-        .post("/assessment/userCreate", {
+        .post("/api/assessment/userCreate", {
           ...this.selectedQuestions,
           ...this.info,
         })
